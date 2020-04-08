@@ -88,6 +88,14 @@ const Merchant = () => {
       });
       setImgs(arr);
     }
+    let reg = new RegExp("&nbsp;", "g"); //创建正则RegExp对象
+    if (res.content && res.content.length) {
+      res.content.map(value => {
+        if (!value.type) {
+          value.msg = value.msg.replace(reg, " ");
+        }
+      })
+    }
     setDataDetail(res);
   };
 
