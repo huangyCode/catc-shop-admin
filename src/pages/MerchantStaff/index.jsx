@@ -121,7 +121,31 @@ const Merchant = () => {
         fieldsValue.imgs.push(item.url);
       }
     }
+
     let param = Object.assign(dataDetail, fieldsValue);
+    let reg = new RegExp(' ', 'g'); //创建正则RegExp对象
+    if (param.content && param.content.length) {
+      param.content.map(value => {
+        if (!value.type) {
+          value.msg = value.msg.replace(reg, '&nbsp;');
+        }
+      });
+      let len = param.content.length;
+      let tmp;
+      for (let j = 0; j < len - 1; j++) {
+        //循环9次
+        for (let i = 0; i < len - 1 - j; i++) {
+          //每次比较10-j-1次数
+          if (!param.content[i].index) param.content[i].index = 0;
+          if (!param.content[i + 1].index) param.content[i + 1].index = 0;
+          if (param.content[i].index > param.content[i + 1].index) {
+            tmp = param.content[i + 1];
+            param.content[i + 1] = param.content[i];
+            param.content[i] = tmp;
+          }
+        }
+      }
+    }
     if (param && param.id) await update(param);
     else await add(param);
     message.info('保持成功');
@@ -333,27 +357,29 @@ const Merchant = () => {
                   if (value.type) {
                     return (
                       <div style={{ display: 'flex' }} key={index}>
-                        <Upload
-                          action="http://120.55.60.49:9980/file/upload"
-                          listType="picture-card"
-                          showUploadList={false}
-                          multiple={true}
-                          beforeUpload={beforeUpload}
-                          onChange={e => {
-                            imgChange(e, index);
-                          }}
-                        >
-                          {value.img ? (
-                            <img src={value.img} alt="avatar" style={{ width: 375 }} />
-                          ) : (
-                            uploadButton
-                          )}
-                        </Upload>
-                        <div>
+                        <div style={{ flex: 1 }}>
+                          <Upload
+                            action="http://120.55.60.49:9980/file/upload"
+                            listType="picture-card"
+                            showUploadList={false}
+                            multiple={true}
+                            beforeUpload={beforeUpload}
+                            onChange={e => {
+                              imgChange(e, index);
+                            }}
+                          >
+                            {value.img ? (
+                              <img src={value.img} alt="avatar" style={{ width: 375 }} />
+                            ) : (
+                              uploadButton
+                            )}
+                          </Upload>
+                        </div>
+                        <div style={{ flex: 1 }}>
                           <div onClick={() => delItem(index)}>
                             <Button>删除</Button>
                           </div>
-                          <div style={{ marginLeft: 20 }}>
+                          <div>
                             <InputNumber
                               value={value.index || 0}
                               onChange={value => indexChange(value, index)}
