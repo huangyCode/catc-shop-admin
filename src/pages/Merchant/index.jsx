@@ -153,8 +153,6 @@ const Merchant = () => {
   };
   const okHandle = async () => {
     const fieldsValue = await form.validateFields();
-    form.resetFields();
-
     if (envImgList && envImgList.length) {
       fieldsValue.envImgs = [];
       envImgList.map(value => {
@@ -185,7 +183,7 @@ const Merchant = () => {
     fieldsValue.service = service;
     fieldsValue.id = dataDetail.id;
     await updateDetail(fieldsValue);
-    await getShop();
+    message.info('修改成功')
   };
   useEffect(() => {
     getShop();

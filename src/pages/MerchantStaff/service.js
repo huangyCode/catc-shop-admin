@@ -4,7 +4,7 @@ export async function getDetail() {
   let r = await request('/merchant/shopStaffInfo', {
     method: 'GET',
   });
-  return r.data;
+  return r && r.result && r.data || {};;
 }
 
 export async function update(params) {

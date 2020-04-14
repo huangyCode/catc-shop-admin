@@ -24,6 +24,7 @@ export const webpackPlugin = config => {
   // optimize chunks
   config.optimization // share the same chunks across different modules
     .runtimeChunk(false)
+    .concatenateModules(true)
     .splitChunks({
       chunks: 'async',
       name: 'vendors',

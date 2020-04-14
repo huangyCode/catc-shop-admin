@@ -3,7 +3,7 @@ export async function getDetail() {
   let r = await request('/merchant/shopDetail', {
     method: 'GET',
   });
-  return r.data;
+  return r && r.result && r.data || {};
 }
 export async function updateDetail(params) {
   return request('/merchant/shopUpdate', {
@@ -16,7 +16,7 @@ export async function getServices() {
   let r = await request('/service/listByShop', {
     method: 'GET',
   });
-  return r.data;
+  return r && r.result && r.data || {};
 }
 export async function addRule(params) {
   return request('/api/rule', {
